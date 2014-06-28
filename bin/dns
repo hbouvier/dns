@@ -1,0 +1,98 @@
+#!/usr/bin/env node
+(function () {
+	var fs        = require('fs'),
+        path      = require('path'),
+        opts      = require('node-options'),
+        rootPath  = path.join(path.dirname(fs.realpathSync(__filename)), '..'),
+        pkgConfig = JSON.parse(fs.readFileSync(path.join(rootPath, 'package.json'))).configuration,
+        version   = JSON.parse(fs.readFileSync(path.join(rootPath, 'package.json'))).version;
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    pkgConfig = opts.mergeEnvironment(pkgConfig);
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+	overlayConfig(pkgConfig.config);
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // The "options" parameter is an object read from the package.json file.
+    // Every property of that object can be overwritten through the command
+    // line argument (e.g. --"property"=newValue)
+    var result = opts.parse(process.argv.slice(2), pkgConfig);
+	overlayConfig(pkgConfig.config);
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    var winston  = require('winston'),
+		meta     = {
+            "module" : pkgConfig.name || "DNS",
+            "pid"    : process.pid
+        },
+        logger   = new (winston.Logger)({ transports: [
+            new (winston.transports.Console)({
+                "level"    : pkgConfig.level || "info",
+                "json"     : false,
+                "colorize" : true
+            })
+        ]});
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // If an argument was passed on the command line, but was not defined in
+    // the "configuration" property of the package.json, lets print the USAGE.
+    if (result.errors) {
+        logger.log('error', opts.usage(pkgConfig), meta);
+        logger.log('error', opts.error(result.errors), meta);
+        process.exit(-1);
+    } else if (result.args.length > 0) {
+        logger.log('error', opts.usage(pkgConfig), meta);
+        logger.log('error', opts.error(result.args), meta);
+        process.exit(-1);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // If not, start as a Web Server. The server will provide both an HTML
+    // frontend and a JSON Web Service.
+
+    // configure Tomahawk
+    pkgConfig.rootPath   = rootPath;
+    pkgConfig.headers    = [];
+    pkgConfig.www        = path.join(rootPath, "/public");
+    pkgConfig.version    = version;
+    pkgConfig.meta       = meta;
+    pkgConfig.port       = 8053;
+    pkgConfig.routes     = path.join(rootPath, "lib/routes");
+    pkgConfig.bodyparser = path.join(rootPath, "lib/bodyparser");
+    pkgConfig.logger     = logger;
+    logger.log('debug', 'options=%j', pkgConfig, meta);
+    pkgConfig.redis = require(path.join(rootPath, "lib/redis")).create(pkgConfig);
+    var app = require('tomahawk').create(pkgConfig).start();
+    var dns = require(path.join(rootPath, "lib/dns")).create(pkgConfig).start();
+
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    function overlayConfig(fileName) {
+    	var absFileName = getAbsFilename(fileName);
+        // Try first the the CWD
+	    if (absFileName && fs.existsSync(absFileName)) {
+	    	var config = JSON.parse(fs.readFileSync(absFileName));
+            pkgConfig = opts.merge(config, pkgConfig);
+	    } else {
+            // No, try the Tomahawk package
+            fileName = pkgConfig.rootPath + "/" + fileName;
+            if (fileName && fs.existsSync(fileName)) {
+                var config = JSON.parse(fs.readFileSync(fileName));
+                pkgConfig = opts.merge(config, pkgConfig);
+            }
+        }
+	}
+	function getAbsFilename(filename) {
+		if (!filename || filename.charAt(0) === '/') return filename;
+		return path.join(process.cwd(), filename);
+	}
+
+}).call();

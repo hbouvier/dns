@@ -1,0 +1,68 @@
+{
+    "author"      : "Henri Bouvier",
+    "name"        : "dns",
+    "description" : "A DNS Server with an Web UI and using Redis a configuration store",
+    "version"     : "0.0.5",
+    "keywords"    : ["dns"],
+
+    "repository"  : {
+        "type" : "git",
+        "url"  : "https://github.com/hbouvier/dns.git"
+    },
+    "dependencies"         : {
+        "tomahawk"     : "0.0.12",
+        "connect"      : "2.12.0",
+        "node-options" : "0.0.3",
+        "winston"      : "0.7.2",
+        "dnsd"         : "0.9.0",
+        "redis"        : "0.10.3",
+        "native-dns"   : "0.6.1"
+    },
+    "engines"              : {
+        "node" : ">= 0.10.0 < 0.11.0"
+    },
+    "main" : "./lib/dns.js",
+    "bin"  : {
+        "dns" : "./bin/dns"
+    },
+    "scripts": {
+        "start": "bin/dns"
+    },
+    "configuration"        : {
+        "name"       : "DNS",
+        "level"      : "debug",
+        "www"        : "public",
+        "config"     : "config.json",
+        "context"    : "/",
+        "port"       : 8053,
+        "ip"         : "0.0.0.0",
+        "routes"     : [],
+        "cgi"        : [],
+        "headers"    : [],
+        "socket"     : {
+            "level"           : "error",
+            "transports"      : [
+                "websocket",
+                "flashsocket",
+                "htmlfile",
+                "xhr-polling",
+                "jsonp-polling"
+            ],
+            "pollingduration" : 10
+        },
+        "dns" : {
+            "host"      : "0.0.0.0",
+            "port"      : 53,
+            "zone"      : "local.dev",
+            "ttl"       : 3600,
+            "prefix"    : "dns:",
+            "primary"   : "8.8.8.8",
+            "secondary" : "8.8.4.4",
+            "timeout"   : 1000
+        },
+        "redis" : {
+            "host" : "127.0.0.1",
+            "port" : 6379
+        }
+    }
+}
