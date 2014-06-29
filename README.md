@@ -52,6 +52,14 @@ A DNS Server with an Web UI and using Redis a configuration store
 
 		Create or Modify the ip address for "host"
 
+	* DELETE /dns/api/v1/name/{host}
+
+		Remove the host from the DNS
+
+	* DELETE /dns/api/v1/name?force=true
+
+		Remove all host from the DNS
+
 	* GET /dns/api/v1/zone
 
 		Return the DNS ZONE
