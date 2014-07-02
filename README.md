@@ -10,7 +10,7 @@ A DNS Server with an Web UI and using Redis a configuration store
 
 ## Installation
 
-	brew instal redis
+	brew install redis
 	sudo npm install -g dns
 
 ## Startup
