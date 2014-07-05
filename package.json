@@ -2,7 +2,7 @@
     "author"      : "Henri Bouvier",
     "name"        : "dns",
     "description" : "A DNS Server with an Web UI and using Redis a configuration store",
-    "version"     : "0.0.8",
+    "version"     : "0.0.9",
     "keywords"    : ["dns"],
 
     "repository"  : {
@@ -14,7 +14,7 @@
         "connect"      : "2.12.0",
         "node-options" : "0.0.3",
         "winston"      : "0.7.2",
-        "dnsd"         : "0.9.0",
+        "hbo-dnsd"     : "0.9.7",
         "redis"        : "0.10.3",
         "native-dns"   : "0.6.1"
     },
