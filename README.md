@@ -71,14 +71,22 @@ A DNS Server with an Web UI and using Redis a configuration store
 
 ## To create or modify a host in the DNS configuration
 
-	curl -X PUT -H 'Content-Type: text/plain' -d '291.168.1.100' http://localhost:8053/dns/api/v1/name/database.domain.com
+	curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":"192.168.1.1", "ipv6":"2605:f8b0:4006:802:0:0:0:1010"}' http://localhost:8053/dns/api/v1/name/database.domain.com
 
 ## To query the address of a host
 
 	curl http://localhost:8053/dns/api/v1/name/database.domain.com
 	or
 	dig @127.0.0.1 database.domain.com
+	or
+	dig @127.0.0.1 database.domain.com AAAA
 
 ## To remove a host from the registry
 
 	curl -X DELETE http://localhost:8053/dns/api/v1/name/database.domain.com
+
+# UPGRADING from 0.0.9 to further version.
+
+You will need to clear your redis configuration before running the new version.
+
+    for key in `echo 'KEYS dns*' | redis-cli | awk '{print $1}'` ; do echo DEL $key ; done | redis-cli
