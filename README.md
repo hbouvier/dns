@@ -71,7 +71,11 @@ A DNS Server with an Web UI and using Redis a configuration store
 
 ## To create or modify a host in the DNS configuration
 
-	curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":"192.168.1.1", "ipv6":"2605:f8b0:4006:802:0:0:0:1010"}' http://localhost:8053/dns/api/v1/name/database.domain.com
+    Single host
+	curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":["192.168.1.1"], "ipv6":["2605:f8b0:4006:802:0:0:0:1010"]}' http://localhost:8053/dns/api/v1/name/database.domain.com
+	
+	Multiple hosts
+    curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":["192.168.1.1","192.168.1.2"], "ipv6":["2605:f8b0:4006:802:0:0:0:1010","2605:f8b0:4006:802:0:0:0:1011"]}' http://localhost:8053/dns/api/v1/name/database.domain.com
 
 ## To query the address of a host
 
@@ -85,8 +89,11 @@ A DNS Server with an Web UI and using Redis a configuration store
 
 	curl -X DELETE http://localhost:8053/dns/api/v1/name/database.domain.com
 
-# UPGRADING from 0.0.9 to further version.
+# UPGRADING from 0.0.9 or 0.1.0 to a version greater than 0.1.0
 
 You will need to clear your redis configuration before running the new version.
 
+    curl -X DELETE http://localhost:8053/dns/api/v1/name\?force\=true
+    or
     for key in `echo 'KEYS dns*' | redis-cli | awk '{print $1}'` ; do echo DEL $key ; done | redis-cli
+    

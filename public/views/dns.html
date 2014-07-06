@@ -18,10 +18,18 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="row in dns.hosts.records | objectFilter:searchText" ng-click="select($index)">
+            <tr ng-hide="row.name.indexOf('.in-addr.arpa') >= 0" ng-repeat="row in dns.hosts.records | objectFilter:searchText" ng-click="select($index)">
                 <td style="white-space:nowrap;">{{row.name}}</td>
-                <td style="white-space:nowrap;">{{row.record.A}}</td>
-                <td style="white-space:nowrap;">{{row.record.AAAA}}</td>
+                <td style="white-space:nowrap;">
+                    <ul>
+                        <li ng-repeat="ipv4 in row.record.A">{{ipv4}}</li>
+                    </ul>
+                </td>
+                <td style="white-space:nowrap;">
+                    <ul>
+                        <li ng-repeat="ipv6 in row.record.AAAA">{{ipv6}}</li>
+                    </ul>
+                </td>
             </tr>
             </tbody>
         </table>
