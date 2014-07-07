@@ -2,7 +2,7 @@
     "author"      : "Henri Bouvier",
     "name"        : "dns",
     "description" : "A DNS Server with an Web UI and using Redis a configuration store",
-    "version"     : "0.1.1",
+    "version"     : "0.1.2",
     "keywords"    : ["dns"],
 
     "repository"  : {
