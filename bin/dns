@@ -60,13 +60,11 @@
 
     // configure Tomahawk
     pkgConfig.rootPath   = rootPath;
-    pkgConfig.headers    = [];
     pkgConfig.www        = path.join(rootPath, "/public");
     pkgConfig.version    = version;
     pkgConfig.meta       = meta;
     pkgConfig.port       = 8053;
     pkgConfig.routes     = path.join(rootPath, "lib/routes");
-    pkgConfig.bodyparser = path.join(rootPath, "lib/bodyparser");
     pkgConfig.logger     = logger;
     logger.log('debug', 'options=%j', pkgConfig, meta);
     pkgConfig.redis = require(path.join(rootPath, "lib/redis")).create(pkgConfig);
