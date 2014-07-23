@@ -20,8 +20,7 @@ angular.module('dnsServices', ['ngResource'])
         };
     })
     .factory('socket', function($rootScope) {
-        var WebDomain  = document.domain,
-            socket = io.connect("");
+        var socket = io.connect('');
             return {
                 on: function(eventName, callback) {
                     socket.on(eventName, function() {

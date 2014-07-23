@@ -2,7 +2,7 @@
   "author": "Henri Bouvier",
   "name": "dns",
   "description": "A DNS Server with an Web UI and using Redis a configuration store",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "keywords": [
     "dns"
   ],
@@ -15,7 +15,7 @@
     "native-dns": "0.6.1",
     "node-options": "0.0.3",
     "redis": "0.10.3",
-    "tomahawk": "0.1.0",
+    "tomahawk": "0.1.2",
     "winston": "0.7.2"
   },
   "engines": {
