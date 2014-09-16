@@ -1,22 +1,23 @@
 {
   "author": "Henri Bouvier",
   "name": "dns",
-  "description": "A DNS Server with an Web UI and using Redis a configuration store",
-  "version": "0.1.5",
+  "description": "A DNS Server with a REST API",
+  "version": "0.2.0",
   "keywords": [
-    "dns"
+    "dns",
+    "REST"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/hbouvier/dns.git"
   },
   "dependencies": {
+    "winston": "0.7.3",
     "hbo-dnsd": "0.9.8",
     "native-dns": "0.6.1",
     "node-options": "0.0.6",
-    "redis": "0.12.1",
-    "tomahawk": "0.1.5",
-    "winston": "0.7.3"
+    "tomahawk": "0.1.6",
+    "tomahawk-plugin-kv-memory-store" :  "0.0.3"
   },
   "engines": {
     "node": ">= 0.10.0 < 0.11.0"
@@ -30,25 +31,16 @@
   },
   "configuration": {
     "name": "DNS",
-    "level": "info",
-    "www": "public",
-    "config": "config.json",
-    "context": "/",
+    "context" : "/",
+    "level" : "info",
     "port": 8053,
-    "ip": "0.0.0.0",
-    "routes": [],
-    "cgi": [],
-    "headers": [],
-    "socket": {
-      "level": "error",
-      "transports": [
-        "websocket",
-        "flashsocket",
-        "htmlfile",
-        "xhr-polling",
-        "jsonp-polling"
-      ],
-      "pollingduration": 10
+    "plugins" : {
+        "store" : {
+            "context"        : "/dns/api/v1",
+            "interval"       : 1000,
+            "implementation" : "tomahawk-plugin-kv-memory-store",
+            "filename"       : "${HOME}/.dns/dns-store"
+        }
     },
     "dns": {
       "host": "0.0.0.0",
@@ -59,10 +51,6 @@
       "primary": "8.8.8.8",
       "secondary": "8.8.4.4",
       "timeout": 1000
-    },
-    "redis": {
-      "host": "127.0.0.1",
-      "port": 6379
     }
   }
 }

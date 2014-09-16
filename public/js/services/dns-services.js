@@ -43,8 +43,8 @@ angular.module('dnsServices', ['ngResource'])
     })
 
     .factory('Hosts', function ($rootScope, $resource) {
-        return $resource($rootScope.baseAPIurl + '/name/:name?', null, {
-            "list"    : { method : "GET", isArray : false  },
+        return $resource($rootScope.baseAPIurl + '/hostname/:hostname?', null, {
+            "list"    : { method : "GET", isArray : true  },
             "get"     : { method : "GET", isArray : false },
             "put"     : { method : "PUT" },
             "delete"  : { method : "DELETE" }

@@ -4,28 +4,28 @@ angular.module('dnsControllers', ['dnsServices', 'dnsModels'])
     		zone  : Zone.get(),
         	hosts : Hosts.list()
         };
-        socket.on('new:host', function (host) {
+        socket.on('/set', function (host) {
         	var found = false;
-        	if ($scope.dns.hosts.records) {
-	        	for (var i = 0 ; i < $scope.dns.hosts.records.length ; ++i) {
-	        		if ($scope.dns.hosts.records[i].name === host.name) {
+        	if ($scope.dns.hosts) {
+	        	for (var i = 0 ; i < $scope.dns.hosts.length ; ++i) {
+	        		if ($scope.dns.hosts[i].hostname === host.hostname) {
 	        			found = true;
-	        			$scope.dns.hosts.records[i].record = host.record;
+	        			$scope.dns.hosts[i].record = host.record;
 	        			break;
 	        		}
 	        	}
 	        }
         	if (!found) {
-        		if (!$scope.dns.hosts.records)
-        			$scope.dns.hosts.records = [];
-        		$scope.dns.hosts.records.push(host);
+        		if (!$scope.dns.hosts)
+        			$scope.dns.hosts = [];
+        		$scope.dns.hosts.push(host);
         	}
         });
-        socket.on('delete:host', function (host) {
-        	if ($scope.dns.hosts.records) {
-	        	for (var i = 0 ; i < $scope.dns.hosts.records.length ; ++i) {
-	        		if ($scope.dns.hosts.records[i].name === host.name) {
-	        			$scope.dns.hosts.records.splice(i, 1);
+        socket.on('/del', function (host) {
+        	if ($scope.dns.hosts) {
+	        	for (var i = 0 ; i < $scope.dns.hosts.length ; ++i) {
+	        		if ($scope.dns.hosts[i].hostname === host.hostname) {
+	        			$scope.dns.hosts.splice(i, 1);
 	        			break;
 	        		}
 	        	}
