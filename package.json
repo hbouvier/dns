@@ -2,7 +2,7 @@
   "author": "Henri Bouvier",
   "name": "dns",
   "description": "A DNS Server with a REST API",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "keywords": [
     "dns",
     "REST"
