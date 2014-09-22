@@ -2,7 +2,7 @@
   "author": "Henri Bouvier",
   "name": "dns",
   "description": "A DNS Server with a REST API",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "keywords": [
     "dns",
     "REST"
@@ -16,7 +16,8 @@
     "hbo-dnsd": "0.9.8",
     "native-dns": "0.6.1",
     "node-options": "0.0.6",
-    "tomahawk": "0.1.6",
+    "tomahawk": "0.2.0",
+    "tomahawk-plugin-socket-io" :  "0.0.1",
     "tomahawk-plugin-kv-memory-store" :  "0.0.3"
   },
   "engines": {
@@ -35,16 +36,22 @@
     "level" : "info",
     "port": 8053,
     "plugins" : {
+        "socket-io" : {
+            "implementation" : "tomahawk-plugin-socket-io"
+        },
         "store" : {
             "context"        : "/dns/api/v1",
             "interval"       : 1000,
             "implementation" : "tomahawk-plugin-kv-memory-store",
             "filename"       : "${HOME}/.dns/dns-store"
+        },
+        "store-route" : {
+            "implementation" : "../plugins"
         }
     },
     "dns": {
       "host": "0.0.0.0",
-      "port": 53,
+      "port": 3053,
       "zone": "local.dev",
       "ttl": 3600,
       "prefix": "dns:",

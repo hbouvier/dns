@@ -1,10 +1,11 @@
 module.exports = function () {
-    function create(app, config, io) {
+    function create(app, config, tomahawk) {
         var context    = config.store.context  || '/dns/api/v1',
             interval   = config.store.interval || interval,
             prefix     = config.dns.prefix     || 'dns:',
             prefixSize = prefix.length,
-            store      = config.store;
+            store      = config.store,
+            io         = config['socket-io'];
 
         // GET
         app.get(context + '/hostname/:hostname?', function (req, res) {
