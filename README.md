@@ -6,7 +6,8 @@
 DNS
 ===
 
-A DNS Server with an Web UI and using Redis a configuration store
+A DNS Server with an Web UI and using Redis a configuration store. Read further
+for Docker instructions.
 
 ## Installation
 
@@ -24,7 +25,7 @@ A DNS Server with an Web UI and using Redis a configuration store
 
 ## REDIS CONFIGURATION
 
-	REDIS_PORT_6379_TCP_ADDR  (default: 127.0.0.1)
+    REDIS_PORT_6379_TCP_ADDR  (default: 127.0.0.1)
     REDIS_PORT_6379_TCP_PORT  (default: 6379)
 
 ## DNS CONFIGURATION
@@ -74,8 +75,8 @@ A DNS Server with an Web UI and using Redis a configuration store
     Single host
 	curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":["192.168.1.1"], "ipv6":["2605:f8b0:4006:802:0:0:0:1010"]}' http://localhost:8053/dns/api/v1/name/database.domain.com
 	
-	Multiple hosts
-    curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":["192.168.1.1","192.168.1.2"], "ipv6":["2605:f8b0:4006:802:0:0:0:1010","2605:f8b0:4006:802:0:0:0:1011"]}' http://localhost:8053/dns/api/v1/name/database.domain.com
+    Multiple hosts
+        curl -X PUT -H 'Content-Type: application/json' -d '{"ipv4":["192.168.1.1","192.168.1.2"], "ipv6":["2605:f8b0:4006:802:0:0:0:1010","2605:f8b0:4006:802:0:0:0:1011"]}' http://localhost:8053/dns/api/v1/name/database.domain.com
 
 ## To query the address of a host
 
@@ -96,4 +97,22 @@ You will need to clear your redis configuration before running the new version.
     curl -X DELETE http://localhost:8053/dns/api/v1/name\?force\=true
     or
     for key in `echo 'KEYS dns*' | redis-cli | awk '{print $1}'` ; do echo DEL $key ; done | redis-cli
+
+# Running in Docker
+
+This DNS server is able to run as a docker container. To build the container,
+run a command similar to the following (`htdns` is a shorthand for HTTP/DNS):
+
+    docker build -t efrecon/htdns .
     
+To run, once you have your image, issue something similar to the following command:
+
+    docker run -it --rm -p 8053:8053 -p 53:53 --name=dns -e DNSTTL=1800 efrecon/htdns --level=debug
+    
+Note how the command above maps port `53`, which requires root privileges and
+also how it passes further the `DNSTTL` environment variable (one of the
+optional variables documented above) and passes command-line arguments to the
+DNS server (in this case, putting it in `debug` mode). The implementation
+currently runs `redis` as a daemon before starting up the node-based DNS server.
+This is for the sake of simplicity, but breaks the principle that there should
+only be one container running in a container.
