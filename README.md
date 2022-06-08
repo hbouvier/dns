@@ -3,6 +3,11 @@
 [![devDependency Status](https://david-dm.org/hbouvier/dns/dev-status.png?theme=shields.io)](https://david-dm.org/hbouvier/dns#info=devDependencies)
 [![NPM version](https://badge.fury.io/js/dns.png)](http://badge.fury.io/js/dns)
 
+# This repository has been abandoned.
+
+This project was a proof of concept to see if it was viable to build a small DNS server with an API. As a PoC it was nice, but too many issues with the underlying libraries made it not viable to use in production.
+
+
 DNS
 ===
 
