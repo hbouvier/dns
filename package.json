@@ -15,7 +15,7 @@
     "native-dns": "0.6.1",
     "node-options": "0.0.6",
     "redis": "0.12.1",
-    "tomahawk": "0.1.5",
+    "tomahawk": "0.2.1",
     "winston": "0.7.3"
   },
   "engines": {
