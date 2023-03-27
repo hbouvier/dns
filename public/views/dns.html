@@ -15,20 +15,77 @@
                 <th>Host Name</th>
                 <th>IP v4</th>
                 <th>IP v6</th>
+                <th>Operation</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-hide="row.name.indexOf('.in-addr.arpa') >= 0" ng-repeat="row in dns.hosts.records | objectFilter:searchText" ng-click="select($index)">
-                <td style="white-space:nowrap;">{{row.name}}</td>
                 <td style="white-space:nowrap;">
-                    <ul>
-                        <li ng-repeat="ipv4 in row.record.A">{{ipv4}}</li>
-                    </ul>
+                    <div style="display: inline-flex;margin-top: 5px">
+                        <input class="form-control" style="margin-right: 5px" type="text" ng-model="row.name" placeholder="域名" readonly />
+                    </div>
                 </td>
                 <td style="white-space:nowrap;">
-                    <ul>
-                        <li ng-repeat="ipv6 in row.record.AAAA">{{ipv6}}</li>
-                    </ul>
+                    <div ng-repeat="ipv4 in row.record.A">
+                        <div style="display: inline-flex;margin-top: 5px">
+                            <input class="form-control" style="margin-right: 5px" type="text" ng-model="ipv4" readonly/>
+                            <button class="btn btn-primary" type="button" ng-click="deleteIP(row, true,ipv4,'')">删除</button>
+                        </div>
+                    </div>
+                    <div style="display: inline-flex;margin-top: 5px">
+                        <input class="form-control" style="margin-right: 5px" type="text" ng-model="row.tmp.ipv4" ng-pattern="/^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/" placeholder="ipv4地址"/>
+                        <button class="btn btn-primary" type="button" ng-click="addIP(row,true,row.tmp.ipv4,'')">增加</button>
+                    </div>
+                </td>
+                <td style="white-space:nowrap;">
+                    <div ng-repeat="ipv6 in row.record.AAAA">
+                        <div style="margin-top: 5px">
+                            <input class="form-control" style="margin-right: 5px" type="text" ng-model="ipv6" readonly/>
+                            <button class="btn btn-primary" type="button" ng-click="deleteIP(row, true,'',ipv6)">删除</button>
+                        </div>
+                    </div>
+                    <div style="display: inline-flex;">
+                        <input class="form-control" style="margin-right: 5px" type="text" ng-model="row.tmp.ipv6" ng-patttern="/^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$/" placeholder="ipv6地址"/>
+                        <button class="btn btn-primary" type="button" ng-click="addIP(row,true,'',row.tmp.ipv6)">增加</button>
+                    </div>
+                </td>
+                <td style="white-space:nowrap;">
+                    <button class="btn btn-primary" type="button" ng-click="deleteDomain(row.name)">删除</button>
+                </td>
+            </tr>
+            <tr>
+                <td style="white-space:nowrap;">
+                    <div style="display: inline-flex;margin-top: 5px">
+                        <input class="form-control" style="margin-right: 5px" type="text" ng-model="newitem.name" placeholder="域名"/>
+                    </div>
+                </td>
+                <td style="white-space:nowrap;">
+                    <div ng-repeat="ipv4 in newitem.record.A">
+                        <div style="display: inline-flex;margin-top: 5px">
+                            <input class="form-control" style="margin-right: 5px" type="text" ng-model="ipv4" readonly />
+                            <button class="btn btn-primary" type="button" ng-click="deleteIP(newitem,false,ipv4,'')">删除</button>
+                        </div>
+                    </div>
+                    <div style="display: inline-flex;margin-top: 5px">
+                        <input class="form-control" style="margin-right: 5px" type="text" ng-model="newitem.tmp.ipv4" ng-pattern="/^(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}$/" placeholder="ipv4地址"/>
+                        <button class="btn btn-primary" type="button" ng-click="addIP(newitem,false,newitem.tmp.ipv4,'')">增加</button>
+                    </div>
+                </td>
+                <td style="white-space:nowrap;">
+                    <div  ng-repeat="ipv6 in newitem.record.AAAA">
+                        <div style="display: inline-flex;margin-top: 5px">
+                            <input class="form-control" style="margin-right: 5px" type="text" ng-model="ipv6" readonly />
+                            <button class="btn btn-primary" type="button" ng-click="deleteIP(newitem,false,'',ipv6)">删除</button>
+                        </div>
+                    </div>
+                    <div style="display: inline-flex;margin-top: 5px">
+                        <input class="form-control" style="margin-right: 5px" type="text" ng-model="newitem.tmp.ipv6" ng-patttern="/^([\da-fA-F]{1,4}:){7}[\da-fA-F]{1,4}$/" placeholder="ipv6地址"/>
+                        <button class="btn btn-primary" type="button" ng-click="addIP(newitem,false,'',newitem.tmp.ipv6)">增加</button>
+                    </div>
+                </td>
+                <td style="white-space:nowrap;">
+                    <button class="btn btn-primary" type="button" ng-click="createDomain()">创建</button>
+                    <button class="btn btn-primary" type="button" ng-click="clearNewItem()">清空</button>
                 </td>
             </tr>
             </tbody>
